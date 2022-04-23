@@ -55,6 +55,7 @@ public class EnemyController : MonoBehaviour
     {
         //play attack animation 
         //deal damage to player
+        //attack timer
     }
 
 }

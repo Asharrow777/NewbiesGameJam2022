@@ -7,6 +7,10 @@ public class EnemyController : MonoBehaviour
 {
 
     public float lookRadius = 10f;
+    public Transform attackPoint;
+    public float attackRange = 0.5f;
+    public LayerMask targetLayers;
+    public int attackdamage = 10;
 
     Transform target;
     NavMeshAgent agent;
@@ -29,6 +33,7 @@ public class EnemyController : MonoBehaviour
 
             if (distance <= agent.stoppingDistance)
             {
+                Debug.Log("Die fuction");
                 //attack target
                 AttackTarget();
                 //Face target
@@ -49,13 +54,20 @@ public class EnemyController : MonoBehaviour
     {
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, lookRadius);
+        Gizmos.DrawWireSphere(attackPoint.position, attackRange);
     }
 
     void AttackTarget()
     {
-        //play attack animation 
+        //play attack animation
         //deal damage to player
+        Collider[] hitTargets = Physics.OverlapSphere(attackPoint.position, attackRange, targetLayers);
         //attack timer
+
+        foreach(Collider target in hitTargets)
+        {
+            target.GetComponent<targetdummyhealth>().TakeDamage(attackdamage);
+        }
     }
 
 }

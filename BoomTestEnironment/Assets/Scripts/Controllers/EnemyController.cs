@@ -11,6 +11,9 @@ public class EnemyController : MonoBehaviour
     public float attackRange = 0.5f;
     public LayerMask targetLayers;
     public int attackdamage = 10;
+    public float attackspeed = 1f;
+    private float attackCooldown = 0f;
+    private float attackDelay = 0.6f;
 
     Transform target;
     NavMeshAgent agent;
@@ -26,16 +29,25 @@ public class EnemyController : MonoBehaviour
     void Update()
     {
         float distance = Vector3.Distance(target.position, transform.position);
+        attackCooldown -= Time.deltaTime;
 
         if (distance <= lookRadius)
         {
             agent.SetDestination(target.position);
 
-            if (distance <= agent.stoppingDistance)
+            //Debug.Log("distance: " + distance);
+            //Debug.Log("agent.stoppingDistance: " + agent.stoppingDistance);
+
+            if ((int)distance <= agent.stoppingDistance)
             {
-                Debug.Log("Die fuction");
+                //Debug.Log("in range of target");
                 //attack target
-                AttackTarget();
+                if(attackCooldown <= 0f)
+                {
+                    AttackTarget();
+                    attackCooldown = 1f / attackspeed;
+                }
+                
                 //Face target
                 FaceTarget();
             }
@@ -59,6 +71,8 @@ public class EnemyController : MonoBehaviour
 
     void AttackTarget()
     {
+
+        Debug.Log(" Attack Target");
         //play attack animation
         //deal damage to player
         Collider[] hitTargets = Physics.OverlapSphere(attackPoint.position, attackRange, targetLayers);
@@ -66,8 +80,18 @@ public class EnemyController : MonoBehaviour
 
         foreach(Collider target in hitTargets)
         {
-            target.GetComponent<targetdummyhealth>().TakeDamage(attackdamage);
+            Debug.Log(" Player detected");
+            StartCoroutine(DoDamage(attackDelay));
+            
         }
     }
+
+    IEnumerator DoDamage(float Delay)
+    {
+        yield return new WaitForSeconds(Delay);
+        target.GetComponent<targetdummyhealth>().TakeDamage(attackdamage);
+
+    }
+
 
 }

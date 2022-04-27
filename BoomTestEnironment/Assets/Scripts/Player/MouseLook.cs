@@ -31,12 +31,6 @@ public class MouseLook : MonoBehaviour
         inputX = Input.GetAxis("Mouse X") * mouseSensitivity * Time.deltaTime;
         inputY = Input.GetAxis("Mouse Y") * mouseSensitivity * Time.deltaTime;
         RotatePlayer(inputX, inputY);
-
-        //if (Mathf.Abs(inputX) > 0f || Mathf.Abs(inputY) > 0f)
-        //{
-            
-        //   //MovePlayer();
-        //}
     }
 
     private void RotatePlayer(float x, float y)

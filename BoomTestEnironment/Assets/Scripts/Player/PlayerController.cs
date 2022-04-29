@@ -9,7 +9,7 @@ public class PlayerController : MonoBehaviour
     public float movementSpeed;
     public float crouchSpeed = 4f;
     public float walkSpeed = 6f;
-    public float sprintSpeed = 8f;
+    public float sprintSpeed = 10f;
     public float jumpHeight = 3f;
     public float jumpYCalculation;
     private float coyoteTimeTimer;
@@ -31,6 +31,7 @@ public class PlayerController : MonoBehaviour
     // Start is called before the first frame update
     void Start()
     {
+        sprintSpeed = 10f;
         jumpYCalculation = Mathf.Sqrt(jumpHeight * -2f * gravity);
         groundCheck = transform.Find("Ground Check");
         groundLayer = LayerMask.GetMask("Ground");
@@ -130,7 +131,8 @@ public class PlayerController : MonoBehaviour
         }
         else if (Input.GetKeyUp(KeyCode.LeftControl))
         {
-            playerController.height *= 2;
+            transform.localScale = new Vector3(1, 1, 1);
+            transform.position = new Vector3(transform.position.x, transform.position.y +.25f , transform.position.z);
             movementSpeed = walkSpeed;
         }
     }
@@ -142,7 +144,9 @@ public class PlayerController : MonoBehaviour
 
     private void Crouch()
     {
-        playerController.height /= 2;
+        //playerController.height /= 2;
+        transform.localScale = new Vector3(1, .5f, 1);
+        transform.position = new Vector3(transform.position.x, transform.position.y - .25f, transform.position.z);
         movementSpeed = crouchSpeed;
     }
 }

@@ -3,11 +3,12 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyController : MonoBehaviour
+public class EnemyPikeController : MonoBehaviour
 {
-
     public float lookRadius = 10f;
+    public float toocloseRadius = 2f;
     public Transform attackPoint;
+    public Transform tooclosePoint;
     public float attackRange = 0.5f;
     public LayerMask targetLayers;
     public int attackdamage = 10;
@@ -42,12 +43,12 @@ public class EnemyController : MonoBehaviour
             {
                 //Debug.Log("in range of target");
                 //attack target
-                if(attackCooldown <= 0f)
+                if (attackCooldown <= 0f)
                 {
                     AttackTarget();
                     attackCooldown = 1f / attackspeed;
                 }
-                
+
                 //Face target
                 FaceTarget();
             }
@@ -67,6 +68,7 @@ public class EnemyController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, lookRadius);
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
+        Gizmos.DrawWireSphere(tooclosePoint.position, toocloseRadius);
     }
 
     void AttackTarget()
@@ -78,11 +80,11 @@ public class EnemyController : MonoBehaviour
         Collider[] hitTargets = Physics.OverlapSphere(attackPoint.position, attackRange, targetLayers);
         //attack timer
 
-        foreach(Collider target in hitTargets)
+        foreach (Collider target in hitTargets)
         {
             Debug.Log(" Player detected");
             StartCoroutine(DoDamage(attackDelay));
-            
+
         }
     }
 
@@ -92,6 +94,4 @@ public class EnemyController : MonoBehaviour
         target.GetComponent<targetdummyhealth>().TakeDamage(attackdamage);
 
     }
-
-
 }

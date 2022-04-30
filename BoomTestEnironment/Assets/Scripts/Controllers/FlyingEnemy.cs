@@ -11,8 +11,8 @@ public class FlyingEnemy : MonoBehaviour
     public LayerMask targetLayers;
     public int attackdamage = 10;
     public float attackspeed = 1f;
-    private float attackCooldown = 0f;
-    private float attackDelay = 0.6f;
+    public float attackCooldown = 0f;
+    public float attackDelay = 0.6f;
 
     Transform target;
     NavMeshAgent agent;

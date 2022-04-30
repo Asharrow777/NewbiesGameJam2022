@@ -3,19 +3,16 @@ using System.Collections.Generic;
 using UnityEngine;
 using UnityEngine.AI;
 
-public class EnemyPikeController : MonoBehaviour
+public class FlyingEnemy : MonoBehaviour
 {
     public float lookRadius = 10f;
-    public float toocloseRadius = 2f;
     public Transform attackPoint;
-    public Transform tooclosePoint;
     public float attackRange = 0.5f;
     public LayerMask targetLayers;
     public int attackdamage = 10;
     public float attackspeed = 1f;
     private float attackCooldown = 0f;
     private float attackDelay = 0.6f;
-    Vector3 newpos; 
 
     Transform target;
     NavMeshAgent agent;
@@ -33,43 +30,26 @@ public class EnemyPikeController : MonoBehaviour
         float distance = Vector3.Distance(target.position, transform.position);
         attackCooldown -= Time.deltaTime;
 
-        if (distance <= lookRadius && distance > toocloseRadius)
+        if (distance <= lookRadius)
         {
             agent.SetDestination(target.position);
 
             //Debug.Log("distance: " + distance);
             //Debug.Log("agent.stoppingDistance: " + agent.stoppingDistance);
 
-            
-        }
-
-        if (distance <= toocloseRadius)
-        {
-            Debug.Log("TooClose");
-            newpos = transform.position;
-            newpos.z = -transform.position.z;
-            transform.position = transform.position + new Vector3(transform.position.x, transform.position.y, transform.position.z -10); 
-            //agent.SetDestination(newpos);
-            //Debug.Log("Destination" + newpos);
-
-            //Debug.Log("distance: " + distance);
-            //Debug.Log("agent.stoppingDistance: " + agent.stoppingDistance);
-
-
-        }
-
-        if ((int)distance <= agent.stoppingDistance && (int)distance > toocloseRadius)
-        {
-            //Debug.Log("in range of target");
-            //attack target
-            if (attackCooldown <= 0f)
+            if ((int)distance <= agent.stoppingDistance)
             {
-                AttackTarget();
-                attackCooldown = 1f / attackspeed;
-            }
+                //Debug.Log("in range of target");
+                //attack target
+                if (attackCooldown <= 0f)
+                {
+                    AttackTarget();
+                    attackCooldown = 1f / attackspeed;
+                }
 
-            //Face target
-            FaceTarget();
+                //Face target
+                FaceTarget();
+            }
         }
     }
 
@@ -86,9 +66,6 @@ public class EnemyPikeController : MonoBehaviour
         Gizmos.color = Color.red;
         Gizmos.DrawWireSphere(transform.position, lookRadius);
         Gizmos.DrawWireSphere(attackPoint.position, attackRange);
-        Gizmos.DrawWireSphere(transform.position, toocloseRadius);
-        Gizmos.color = Color.yellow;
-        Gizmos.DrawWireSphere(newpos, attackRange);
     }
 
     void AttackTarget()

@@ -85,6 +85,25 @@ public class FlyingEnemy : MonoBehaviour
         }
     }
 
+
+
+    void RangedAttackTarget()
+    {
+
+        Debug.Log(" Attack Target");
+        //play attack animation
+        //deal damage to player
+        Collider[] hitTargets = Physics.OverlapSphere(attackPoint.position, attackRange, targetLayers);
+        //attack timer
+
+        foreach (Collider target in hitTargets)
+        {
+            Debug.Log(" Player detected");
+            StartCoroutine(DoDamage(attackDelay));
+
+        }
+    }
+
     IEnumerator DoDamage(float Delay)
     {
         yield return new WaitForSeconds(Delay);
